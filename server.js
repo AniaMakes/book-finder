@@ -6,7 +6,7 @@ const app = express();
 app.use(bodyParser.json());
 app.set('view engine', 'hbs');
 
-app.post("/search", function(req, res){
+app.get("/search", function(req, res){
   res.render("query", req.body);
 });
 
