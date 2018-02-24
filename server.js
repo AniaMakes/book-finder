@@ -12,6 +12,9 @@ app.get("/search", function(req, res){
   res.render("query", req.body);
 });
 
+app.post("/process-query", function(req, res){
+  console.log(req.body.input);
+});
 
 app.listen(8080, function(){
   console.log("listening on port 8080");
