@@ -6,6 +6,8 @@ const app = express();
 app.use(bodyParser.json());
 app.set('view engine', 'hbs');
 
+app.use('/static', express.static('static'));
+
 app.get("/search", function(req, res){
   res.render("query", req.body);
 });

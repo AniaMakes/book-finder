@@ -7,5 +7,8 @@ function processQuery(event){
 
   console.log(event);
 
-  const input = document.getElementById("inputBox");
+  const input = document.getElementById("inputBox").value;
+
+  console.log(input);
+
 }
