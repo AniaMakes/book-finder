@@ -2,9 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 
-const charCoder = require('./lib/charCoder');
-const isbnMaker = require('./lib/isbnMaker');
-const fetchBook = require('./lib/fetchBook');
 const bookSearch = require('./lib/google-book-search');
 
 
@@ -39,7 +36,7 @@ app.post("/process-query", function(req, res){
     outputBookInfo.title = randomBook.title;
     outputBookInfo.coverImage = randomBook.thumbnail;
 
-    if (randomBook.authors.length > 0){
+    if (randomBook.authors.length != undefined){
       outputBookInfo.author = randomBook.authors[0];
     } else {
       outputBookInfo.author = "Author unknown";
