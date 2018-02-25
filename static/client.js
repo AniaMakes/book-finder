@@ -13,7 +13,7 @@ function processQuery(event){
 
   postData("http://localhost:8080/process-query", {input})
     .then(function (data){
-      console.log(data);
+      console.log('hi', data);
     })
     .catch(error => console.error(error));
 
@@ -38,7 +38,6 @@ function postData(url, data) {
     referrer: 'no-referrer', // *client
   })
   .then( function(response){
-    console.log(response);}
-    //response => response.json()
-); // parses response to JSON
+    return response.json();
+  });
 }

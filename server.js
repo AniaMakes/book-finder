@@ -22,13 +22,15 @@ app.post("/process-query", function(req, res){
   const input = req.body.input;
 
   console.log(input);
-  const randomBook = bookSearch(input);
-  // const charCoded = charCoder(input);
-  // const isbn = isbnMaker(charCoded);
-  //
-  // console.log(isbn);
-  //
-  // const book = fetchBook("0385472579");
+
+  bookSearch(input, function(error, results, msg) {
+    if (msg) {
+      console.log(msg);
+    }
+    console.log("BOOKS IN SERVER : ", results[0] );
+    res.json(results[0]);
+
+  });
 
 });
 
