@@ -27,8 +27,27 @@ app.post("/process-query", function(req, res){
     if (msg) {
       console.log(msg);
     }
-    console.log("BOOKS IN SERVER : ", results[0] );
-    res.json(results[0]);
+
+    const resultsLength = results.length;
+    let randomNumber = Math.floor(Math.random() * resultsLength);
+
+    const randomBook = results[randomNumber];
+    console.log(randomBook);
+
+    let outputBookInfo = {};
+
+    outputBookInfo.title = randomBook.title;
+    outputBookInfo.coverImage = randomBook.thumbnail;
+
+    if (randomBook.authors.length > 0){
+      outputBookInfo.author = randomBook.authors[0];
+    } else {
+      outputBookInfo.author = "Author unknown";
+    }
+
+    console.log("BOOKS IN SERVER : ", outputBookInfo);
+
+    res.json(outputBookInfo);
 
   });
 
