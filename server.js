@@ -39,7 +39,7 @@ app.post("/process-query", function(req, res){
     if (randomBook.authors.length != undefined){
       outputBookInfo.author = randomBook.authors[0];
     } else {
-      outputBookInfo.author = "Author unknown";
+      outputBookInfo.author = "An Unknown Author";
     }
 
     console.log("BOOKS IN SERVER : ", outputBookInfo);
