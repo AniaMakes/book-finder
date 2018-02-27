@@ -36,7 +36,7 @@ app.post("/process-query", function(req, res){
     outputBookInfo.title = randomBook.title;
     outputBookInfo.coverImage = randomBook.thumbnail;
 
-    if (randomBook.authors.length != undefined){
+    if (randomBook.authors){
       outputBookInfo.author = randomBook.authors[0];
     } else {
       outputBookInfo.author = "An Unknown Author";
