@@ -4,6 +4,8 @@ const app = express();
 const bookSearch = require('./lib/google-book-search');
 
 const Twit = require('twit');
+console.log("AT:", process.env.ACCESS_TOKEN);
+console.log("ATS: ", process.env.ACCESS_TOKEN_SECRET);
 const T = new Twit({
   consumer_key:         process.env.CONSUMER_KEY,
   consumer_secret:      process.env.CONSUMER_SECRET,
