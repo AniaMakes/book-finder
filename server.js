@@ -10,39 +10,73 @@ const T = new Twit({
   access_token:         process.env.ACCESS_TOKEN,
   access_token_secret:  process.env.ACCESS_TOKEN_SECRET,
   timeout_ms:           60*1000,
-})
+});
 
-let stream = T.stream('statuses/filter', {track: 'cook'})
+let stream = T.stream('statuses/filter', {track: '@gimme_book'});
 
 stream.on('tweet', function (tweet){
   const tweetText = tweet.text;
   const username = tweet.user.screen_name;
   console.log(tweetText, username);
-  console.log(generateReplyAndTweetIt(tweetText));
-  console.log("------");
-})
+  const queryText = removeAtHandle(tweetText);
+  console.log(queryText);
 
-function generateReplyAndTweetIt (queryString){
-  bookSearch(queryString, function(error, results, msg) {
-    if (msg) {
-      console.log(msg);
-    }
+  searchAndGenerateReply(queryText, function(error, reply) {
+    console.log('error', error);
+    // reply is the actual stuff we want to tweet back
+    console.log('reply', reply);
 
-  // bookSearch generates an array. If the array is empty, response is a string stating so. If it's not empty, book gets processed and spits out a book.
-  let book;
+    tweetReply(username, reply);
 
-  if (results && results.length > 0){
-    console.log("1: ", results);
-    book = processBookSearch(results);
-  };
-
-  if (book != undefined){
-    console.log("2: ",book);
-  }
+    console.log("------");
+  });
 });
+
+function tweetReply (username, replyText){
+  T.post('statuses/update', {status :`@${username} ${replyText}`}, function(err, data, response){
+    console.log(data);
+  });
+}
+
+function removeAtHandle(text){
+  let textArr = text.split(" ");
+
+  textArr.forEach(function(word, index){
+    if (word == "@gimme_book"){
+      textArr[index] = "";
+    }
+  });
+
+  return textArr.join(" ");
 }
 
 
+function searchAndGenerateReply (queryString, cb){
+  bookSearch(queryString, function(error, results, msg){
+    generateReply(error, results, msg, cb);
+  });
+}
+
+function generateReply(error, results, msg, cb) {
+  // bookSearch generates an array. If the array is empty, response is a string stating so. If it's not empty, book gets processed and spits out a book.
+  let book;
+  let text;
+
+  if (results && results.length > 0){
+    book = processBookSearch(results);
+    const {title, author} = book;
+    text = `Our book recommendation for you is "${title}" by ${author}.`;
+  }
+  else {
+    text =  "No book found.";
+  }
+
+  if (msg) {
+    text = msg;
+  }
+
+  cb(error, text);
+}
 // const fetch = require("node-fetch");
 app.use(bodyParser.json());
 app.set('view engine', 'hbs');
