@@ -3,6 +3,9 @@ const bodyParser = require("body-parser");
 const app = express();
 const bookSearch = require('./lib/google-book-search');
 
+//----------------------------------------
+// twit - used for the streaming approach, but can't be deployed for free, due to constant listening
+
 const Twit = require('twit');
 const T = new Twit({
   consumer_key:         process.env.CONSUMER_KEY,
@@ -37,6 +40,8 @@ function tweetReply (username, replyText){
     console.log(data);
   });
 }
+
+//-------------------------------------------
 
 function removeAtHandle(text){
   let textArr = text.split(" ");
