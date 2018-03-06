@@ -3,9 +3,8 @@ const bodyParser = require("body-parser");
 const app = express();
 const bookSearch = require('./lib/google-book-search');
 
+// TWIT -----------------------------
 const Twit = require('twit');
-console.log("AT:", process.env.ACCESS_TOKEN);
-console.log("ATS: ", process.env.ACCESS_TOKEN_SECRET);
 const T = new Twit({
   consumer_key:         process.env.CONSUMER_KEY,
   consumer_secret:      process.env.CONSUMER_SECRET,
@@ -16,29 +15,47 @@ const T = new Twit({
 
 let stream = T.stream('statuses/filter', {track: '@gimme_book'});
 
-stream.on('tweet', function (tweet){
-  const tweetText = tweet.text;
-  const username = tweet.user.screen_name;
-  console.log(tweetText, username);
-  const queryText = removeAtHandle(tweetText);
-  console.log(queryText);
+// stream.on('tweet', function (tweet){
+//   const tweetText = tweet.text;
+//   const username = tweet.user.screen_name;
+//   console.log(tweetText, username);
+//   const queryText = removeAtHandle(tweetText);
+//   console.log(queryText);
+//
+//   searchAndGenerateReply(queryText, function(error, reply) {
+//     console.log('error', error);
+//     // reply is the actual stuff we want to tweet back
+//     console.log('reply', reply);
+//
+//     tweetReply(username, reply);
+//
+//     console.log("------");
+//   });
+// });
+//
+// function tweetReply (username, replyText){
+//   T.post('statuses/update', {status :`@${username} ${replyText}`}, function(err, data, response){
+//     console.log(data);
+//   });
+// }
 
-  searchAndGenerateReply(queryText, function(error, reply) {
-    console.log('error', error);
-    // reply is the actual stuff we want to tweet back
-    console.log('reply', reply);
-
-    tweetReply(username, reply);
-
-    console.log("------");
+// ----------------------------------
+// let twitter = require("twitter");
+//
+// const tweet = new twitter({
+//   consumer_key:         process.env.CONSUMER_KEY,
+//   consumer_secret:      process.env.CONSUMER_SECRET,
+//   access_token:         process.env.ACCESS_TOKEN,
+//   access_token_secret:  process.env.ACCESS_TOKEN_SECRET,
+//   timeout_ms:           60*1000,
+// });
+app.get("/men-time", function(req, res){
+  T.get('/statuses/mentions_timeline', { count: 10}, function(error, data){
+   console.log("Mentions timeline: ", data);
+   res.json(data);
   });
-});
-
-function tweetReply (username, replyText){
-  T.post('statuses/update', {status :`@${username} ${replyText}`}, function(err, data, response){
-    console.log(data);
-  });
-}
+})
+// -----------------------------------
 
 function removeAtHandle(text){
   let textArr = text.split(" ");
@@ -49,7 +66,10 @@ function removeAtHandle(text){
     }
   });
 
-  return textArr.join(" ");
+  let preRegExStr = textArr.join(" ");
+  let postRegExStr = preRegExStr.replace(/[`~!@#$%^&*()_|+-=?;:'",.<>\{\}\[\]\\\/]/g, "");
+
+  return postRegExStr;
 }
 
 
