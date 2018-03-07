@@ -61,7 +61,7 @@ function removeAtHandle(text){
   let textArr = text.split(" ");
 
   textArr.forEach(function(word, index){
-    if (word == "@gimme_book"){
+    if (word.charAt(0) == "@"){
       textArr[index] = "";
     }
   });
@@ -72,6 +72,7 @@ function removeAtHandle(text){
   return postRegExStr;
 }
 
+module.exports.removeAtHandle = removeAtHandle;
 
 function searchAndGenerateReply (queryString, cb){
   bookSearch(queryString, function(error, results, msg){
