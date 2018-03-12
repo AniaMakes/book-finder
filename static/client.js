@@ -4,6 +4,7 @@ inputForm.addEventListener("submit", processQuery);
 
 function processQuery(event){
   event.preventDefault();
+  console.log("i'm in processQuery");
 
   console.log(event);
 

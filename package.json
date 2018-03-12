@@ -26,6 +26,8 @@
     "twitter": "^1.7.1"
   },
   "devDependencies": {
-    "jest": "^22.4.2"
+    "jest": "^22.4.2",
+    "node-fs-extra": "^0.8.2",
+    "seedrandom": "^2.4.3"
   }
 }

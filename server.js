@@ -2,6 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const bookSearch = require('./lib/google-book-search');
+const removeAtHandle = require("./lib/removeAtHandle");
+const processBookSearch = require("./lib/processBookSearch");
 
 // TWIT -----------------------------
 const Twit = require('twit');
@@ -57,23 +59,6 @@ app.get("/men-time", function(req, res){
 })
 // -----------------------------------
 
-function removeAtHandle(text){
-  let textArr = text.split(" ");
-
-  textArr.forEach(function(word, index){
-    if (word.charAt(0) == "@"){
-      textArr[index] = "";
-    }
-  });
-
-  let preRegExStr = textArr.join(" ");
-  let postRegExStr = preRegExStr.replace(/[`~!@#$%^&*()_|+-=?;:'",.<>\{\}\[\]\\\/]/g, "");
-
-  return postRegExStr;
-}
-
-module.exports.removeAtHandle = removeAtHandle;
-
 function searchAndGenerateReply (queryString, cb){
   bookSearch(queryString, function(error, results, msg){
     generateReply(error, results, msg, cb);
@@ -120,6 +105,8 @@ app.post("/process-query", function(req, res){
       console.log(msg);
     }
 
+    console.log(processBookSearch);
+    
     let book = processBookSearch(results);
 
     res.json(book);
@@ -127,28 +114,28 @@ app.post("/process-query", function(req, res){
 
 });
 
-function processBookSearch(results){
-  const resultsLength = results.length;
-  let randomNumber = Math.floor(Math.random() * resultsLength);
-
-  const randomBook = results[randomNumber];
-  console.log(randomBook);
-
-  let outputBookInfo = {};
-
-  outputBookInfo.title = randomBook.title;
-  outputBookInfo.coverImage = randomBook.thumbnail;
-
-  if (randomBook.authors){
-    outputBookInfo.author = randomBook.authors[0];
-  } else {
-    outputBookInfo.author = "An Unknown Author";
-  }
-
-  console.log("BOOKS IN SERVER : ", outputBookInfo);
-
-  return outputBookInfo;
-}
+// function processBookSearch(results){
+//   const resultsLength = results.length;
+//   let randomNumber = Math.floor(Math.random() * resultsLength);
+//
+//   const randomBook = results[randomNumber];
+//   console.log(randomBook);
+//
+//   let outputBookInfo = {};
+//
+//   outputBookInfo.title = randomBook.title;
+//   outputBookInfo.coverImage = randomBook.thumbnail;
+//
+//   if (randomBook.authors){
+//     outputBookInfo.author = randomBook.authors[0];
+//   } else {
+//     outputBookInfo.author = "An Unknown Author";
+//   }
+//
+//   console.log("BOOKS IN SERVER : ", outputBookInfo);
+//
+//   return outputBookInfo;
+// }
 
 
 app.listen(process.env.PORT, function(){
