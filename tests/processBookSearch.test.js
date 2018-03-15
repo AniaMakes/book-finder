@@ -2,7 +2,7 @@ const processBookSearch = require("../lib/processBookSearch.js");
 const neurotribes = require("./dummyData/resultsNeurotribes.json");
 const seedrandom = require("seedrandom");
 
-test("process book search", function(){
+test.skip("process book search", function(){
   beforeEach(() => {
     Math.seedrandom('bookworm', { global: true });
   });
